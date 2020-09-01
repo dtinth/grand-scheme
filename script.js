@@ -40,6 +40,7 @@
               items.value = r.tasks
             })
         } catch (error) {
+          // TODO: #3 Display an error message visually instead of showing an alert
           alert(error)
         }
       })
