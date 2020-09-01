@@ -32,6 +32,7 @@
       const tree = Vue.computed(() => createTree(items.value))
       Vue.onMounted(async () => {
         try {
+          // TODO: #2 Allow data ingestion via postMessage
           await fetch(new URLSearchParams(location.search).get('url'))
             .then((r) => r.json())
             .then((r) => {
