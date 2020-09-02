@@ -19,7 +19,9 @@ jobs:
             p todo_issues_in_code
 
             all_open_issues = JSON.parse `curl "https://api.github.com/repos/$GITHUB_REPOSITORY/issues?per_page=100&access_token=$GITHUB_TOKEN"`
-            puts "Open issues:"
+            open_issues_without_todo_label = all_open_issues.reject { |issue| issue['labels'].map { |l| l['name'] }.include? 'TODO' }
+            puts "Open issues without TODO label:"
+            p open_issues_without_todo_label.map { |issue| issue['number'] }
 
             # TODO: #9 Add a TODO label to the issue when a TODO comment reference is detected
 
