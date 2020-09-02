@@ -7,9 +7,49 @@
   </head>
   <body>
     <script>
-      // TODO: #4 Display a grand-scheme based on the project’s issues
-      const url =
-        'https://api.github.com/repos/dtinth/grand-scheme/issues?per_page=100&state=all'
+      // @ts-check
+      async function main() {
+        const url =
+          'https://api.github.com/repos/dtinth/grand-scheme/issues?per_page=100&state=all'
+        const data = await (async () => {
+          if (sessionStorage.issueCache) {
+            return JSON.parse(sessionStorage.issueCache)
+          } else {
+            const json = await fetch(url).then((r) => r.json())
+            sessionStorage.issueCache = JSON.stringify(json)
+            return json
+          }
+        })()
+
+        const items = data.map((issue) => {
+          const item = {
+            title: issue.title,
+            id: 'GH-' + issue.number,
+            url: issue.html_url,
+            status: issue.state === 'open' ? 'outstanding' : 'completed',
+          }
+          return item
+        })
+
+        // TODO: #4 Display a grand-scheme based on the project’s issues
+        console.log(data)
+        console.log(items)
+      }
+      main()
     </script>
+    <iframe
+      src="index.html"
+      id="myIframe"
+      style="
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      "
+    ></iframe>
   </body>
 </html>
