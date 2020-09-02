@@ -18,6 +18,11 @@ jobs:
             puts "TODO markers found in code:"
             p todo_issues_in_code
 
+            all_open_issues = JSON.parse `curl "https://api.github.com/repos/$GITHUB_REPOSITORY/issues?per_page=100&access_token=$GITHUB_TOKEN"`
+            puts "Open issues:"
+
+            # TODO: #9 Add a TODO label to the issue when a TODO comment reference is detected
+
             open_issues_with_todo_label = JSON.parse `curl "https://api.github.com/repos/$GITHUB_REPOSITORY/issues?per_page=100&labels=TODO&access_token=$GITHUB_TOKEN"`
             puts "Open issues with TODO label:"
             p open_issues_with_todo_label.map { |issue| issue['number'] }
