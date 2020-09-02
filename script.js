@@ -42,6 +42,16 @@
                 items.value = r.tasks
               })
           }
+          if (parent) {
+            onmessage = (e) => {
+              if (e.source === parent) {
+                if (e.data.grandSchemeItems) {
+                  items.value = e.data.grandSchemeItems
+                }
+              }
+            }
+            parent.postMessage({ grandSchemeReady: true }, '*')
+          }
         } catch (error) {
           // TODO: #3 Display an error message visually instead of showing an alert
           alert(error)
@@ -103,6 +113,7 @@
       class="absolute flex items-center"
       :style="style"
     >
+      <!-- TODO: #5 Make the work item link to the URL -->
       <div
         class="flex-none rounded border w-4 h-4 bg-#353433"
         :class="boxClasses"

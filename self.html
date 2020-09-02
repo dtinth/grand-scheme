@@ -11,44 +11,69 @@
       async function main() {
         const url =
           'https://api.github.com/repos/dtinth/grand-scheme/issues?per_page=100&state=all'
-        const data = await (async () => {
-          if (sessionStorage.issueCache) {
-            return JSON.parse(sessionStorage.issueCache)
-          } else {
-            const json = await fetch(url).then((r) => r.json())
-            sessionStorage.issueCache = JSON.stringify(json)
-            return json
-          }
-        })()
 
-        const items = data.map((issue) => {
-          const links = []
-          const typeMap = {
-            follows: 'precedent',
-            'depends on': 'dependency',
-            blocks: 'dependent',
-            precedes: 'subsequent',
-          }
-          for (const m of issue.body.matchAll(
-            /(follows|precedes|depends on|blocks) #(\d+)/g,
-          )) {
-            if (typeMap[m[1]]) {
-              links.push({ type: typeMap[m[1]], id: `GH-${m[2]}` })
+        const readyPromise = new Promise((resolve) => {
+          onmessage = (e) => {
+            const myIframe = /** @type {HTMLIFrameElement} */ (document.querySelector(
+              '#myIframe',
+            ))
+            if (e.source === myIframe.contentWindow) {
+              if (e.data.grandSchemeReady) {
+                resolve(e.source)
+              }
             }
           }
-          const item = {
-            title: issue.title,
-            id: 'GH-' + issue.number,
-            url: issue.html_url,
-            status: issue.state === 'open' ? 'outstanding' : 'completed',
-            links,
-          }
-          return item
         })
 
+        async function fetchItems(refresh) {
+          const data = await (async () => {
+            if (sessionStorage.issueCache && !refresh) {
+              return JSON.parse(sessionStorage.issueCache)
+            } else {
+              const json = await fetch(url).then((r) => r.json())
+              sessionStorage.issueCache = JSON.stringify(json)
+              return json
+            }
+          })()
+
+          const items = data.map((issue) => {
+            const links = []
+            const typeMap = {
+              follows: 'precedent',
+              'depends on': 'dependency',
+              blocks: 'dependent',
+              precedes: 'subsequent',
+            }
+            for (const m of issue.body.matchAll(
+              /(follows|precedes|depends on|blocks) #(\d+)/g,
+            )) {
+              if (typeMap[m[1]]) {
+                links.push({ type: typeMap[m[1]], id: `GH-${m[2]}` })
+              }
+            }
+            const item = {
+              title: issue.title,
+              id: 'GH-' + issue.number,
+              url: issue.html_url,
+              status: issue.state === 'open' ? 'outstanding' : 'completed',
+              links,
+            }
+            return item
+          })
+
+          return items
+        }
+
         // TODO: #4 Display a grand-scheme based on the project’s issues
-        console.log(data)
-        console.log(items)
+        async function showItems(refresh) {
+          ;(await readyPromise).postMessage(
+            { grandSchemeItems: await fetchItems(refresh) },
+            '*',
+          )
+        }
+
+        Object.assign(window, { refreshItems: () => showItems(true) })
+        await showItems(false)
       }
       main()
     </script>
@@ -66,5 +91,14 @@
         border: 0;
       "
     ></iframe>
+    <button
+      style="position: absolute; top: 10px; right: 10px"
+      onclick="
+        // @ts-ignore
+        refreshItems()
+      "
+    >
+      Refresh
+    </button>
   </body>
 </html>
