@@ -19,9 +19,13 @@ jobs:
             puts "TODO markers found in code:"
             p todo_issues_in_code
 
-            all_issues = JSON.parse `curl "https://api.github.com/repos/$GITHUB_REPOSITORY/issues?per_page=100&labels=TODO&access_token=$GITHUB_TOKEN"`
+            open_issues_with_todo_label = JSON.parse `curl "https://api.github.com/repos/$GITHUB_REPOSITORY/issues?per_page=100&labels=TODO&access_token=$GITHUB_TOKEN"`
             puts "Open issues with TODO label:"
-            p all_issues.map { |issue| issue['number'] }
+            p open_issues_with_todo_label.map { |issue| issue['number'] }
 
-            # TODO: #8 Close the unclosed issues with the TODO label but without corresponding TODO comment
+            open_issues_with_todo_label.each do |issue|
+              continue if todo_issues_in_code.include? issue['number']
+              # TODO: #8 Close the unclosed issues with the TODO label but without corresponding TODO comment
+              puts "Closing issue ##{issue['number']}"
+            end
           EOF
