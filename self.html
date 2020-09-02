@@ -22,11 +22,26 @@
         })()
 
         const items = data.map((issue) => {
+          const links = []
+          const typeMap = {
+            follows: 'precedent',
+            'depends on': 'dependency',
+            blocks: 'dependent',
+            precedes: 'subsequent',
+          }
+          for (const m of issue.body.matchAll(
+            /(follows|precedes|depends on|blocks) #(\d+)/g,
+          )) {
+            if (typeMap[m[1]]) {
+              links.push({ type: typeMap[m[1]], id: `GH-${m[2]}` })
+            }
+          }
           const item = {
             title: issue.title,
             id: 'GH-' + issue.number,
             url: issue.html_url,
             status: issue.state === 'open' ? 'outstanding' : 'completed',
+            links,
           }
           return item
         })
