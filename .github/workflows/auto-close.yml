@@ -1,7 +1,7 @@
 name: Auto-close TODO issues
 on:
   push:
-    branches: [master]
+    branches: [main]
 jobs:
   update_readme:
     runs-on: ubuntu-latest
