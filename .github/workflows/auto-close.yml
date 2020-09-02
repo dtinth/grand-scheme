@@ -23,7 +23,11 @@ jobs:
             puts "Open issues without TODO label:"
             p open_issues_without_todo_label.map { |issue| issue['number'] }
 
-            # TODO: #9 Add a TODO label to the issue when a TODO comment reference is detected
+            open_issues_without_todo_label.each do |issue|
+              next unless todo_issues_in_code.include? issue['number']
+              puts "Adding TODO label to ##{issue['number']}"
+              # TODO: #9 Add a TODO label to the issue when a TODO comment reference is detected
+            end
 
             open_issues_with_todo_label = JSON.parse `curl "https://api.github.com/repos/$GITHUB_REPOSITORY/issues?per_page=100&labels=TODO&access_token=$GITHUB_TOKEN"`
             puts "Open issues with TODO label:"
