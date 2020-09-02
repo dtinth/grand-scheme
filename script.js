@@ -111,6 +111,7 @@
       :data-y="item.y"
       :href="item.data.item.url || 'javascript://'"
       class="absolute flex items-center"
+      target="_blank"
       :style="style"
     >
       <div
