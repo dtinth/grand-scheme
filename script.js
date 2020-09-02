@@ -31,14 +31,17 @@
       const items = Vue.ref(/** @type {WorkItem[]} */ ([]))
       const tree = Vue.computed(() => createTree(items.value))
       Vue.onMounted(async () => {
+        // TODO: #2 Allow data ingestion via postMessage
         try {
-          // TODO: #2 Allow data ingestion via postMessage
-          await fetch(new URLSearchParams(location.search).get('url'))
-            .then((r) => r.json())
-            .then((r) => {
-              console.log(r)
-              items.value = r.tasks
-            })
+          const url = new URLSearchParams(location.search).get('url')
+          if (url) {
+            await fetch(url)
+              .then((r) => r.json())
+              .then((r) => {
+                console.log(r)
+                items.value = r.tasks
+              })
+          }
         } catch (error) {
           // TODO: #3 Display an error message visually instead of showing an alert
           alert(error)
