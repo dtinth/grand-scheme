@@ -24,7 +24,7 @@ jobs:
             p open_issues_with_todo_label.map { |issue| issue['number'] }
 
             open_issues_with_todo_label.each do |issue|
-              continue if todo_issues_in_code.include? issue['number']
+              next if todo_issues_in_code.include? issue['number']
               # TODO: #8 Close the unclosed issues with the TODO label but without corresponding TODO comment
               puts "Closing issue ##{issue['number']}"
               # system %(curl -X PATCH -d state=closed "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/#{issue['number']}?access_token=$GITHUB_TOKEN")
