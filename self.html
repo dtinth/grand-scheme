@@ -52,8 +52,7 @@
               }
             }
             const item = {
-              // TODO: #10 Also display issue number on the title
-              title: issue.title,
+              title: `#${issue.number}: ${issue.title}`,
               id: 'GH-' + issue.number,
               url: issue.html_url,
               status: issue.state === 'open' ? 'outstanding' : 'completed',
