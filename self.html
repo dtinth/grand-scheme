@@ -64,7 +64,6 @@
           return items
         }
 
-        // TODO: #4 Display a grand-scheme based on the project’s issues
         async function showItems(refresh) {
           ;(await readyPromise).postMessage(
             { grandSchemeItems: await fetchItems(refresh) },

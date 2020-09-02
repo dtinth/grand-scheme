@@ -31,7 +31,6 @@
       const items = Vue.ref(/** @type {WorkItem[]} */ ([]))
       const tree = Vue.computed(() => createTree(items.value))
       Vue.onMounted(async () => {
-        // TODO: #2 Allow data ingestion via postMessage
         try {
           const url = new URLSearchParams(location.search).get('url')
           if (url) {
