@@ -42,7 +42,7 @@ jobs:
               puts "Adding TODO label to ##{issue['number']}"
               add_label_to issue, "TODO"
               message = [
-                "I am adding a `TODO` label to issue now because I found a TODO comment referencing this issue on the default branch. This will allow me to close the issue when that TODO comment is removed from the default branch.",
+                "I am adding a `TODO` label to this issue because I found a TODO comment referencing this issue on the default branch. This will allow me to close the issue when that TODO comment is removed from the default branch.",
                 "",
                 "The commit being processed is #{ENV['GITHUB_SHA']}. [Ran on GitHub Actions.](https://github.com/#{ENV['GITHUB_REPOSITORY']}/actions/runs/#{ENV['GITHUB_RUN_ID']})",
               ].join("\n")
