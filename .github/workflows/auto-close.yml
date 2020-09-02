@@ -31,9 +31,10 @@ jobs:
               message = [
                 "I am closing this issue now because these two conditions are met:",
                 "",
-                "- This issue has a `TODO` label."
-                "- A `TODO` comment referencing this issue no longer appears in the repository's default branch."
+                "- This issue has a `TODO` label.",
+                "- A `TODO` comment referencing this issue no longer appears in the repository's default branch.",
               ].join("\n")
+              message = "Dry-run"
               post_body = { body: message }
               system %(curl -X POST -H "Content-Type: application/json" -d@- "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/#{issue['number']}/comments?access_token=$GITHUB_TOKEN" << 'JSON'\n#{post_body.to_json}\nJSON)
             end
