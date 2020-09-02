@@ -106,13 +106,13 @@
         }),
       }
     },
-    template: html`<div
+    template: html`<a
       :data-x="item.x"
       :data-y="item.y"
+      :href="item.data.item.url || 'javascript://'"
       class="absolute flex items-center"
       :style="style"
     >
-      <!-- TODO: #5 Make the work item link to the URL -->
       <div
         class="flex-none rounded border w-4 h-4 bg-#353433"
         :class="boxClasses"
@@ -125,7 +125,7 @@
           {{ item.data.item.title }}
         </span>
       </div>
-    </div>`,
+    </a>`,
   })
 
   app.component('tree-line', {
