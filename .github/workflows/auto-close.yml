@@ -28,7 +28,13 @@ jobs:
               # TODO: #8 Close the unclosed issues with the TODO label but without corresponding TODO comment
               puts "Closing issue ##{issue['number']}"
               # system %(curl -X PATCH -d state=closed "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/#{issue['number']}?access_token=$GITHUB_TOKEN")
-              body = { body: "This issue would be closed" }
-              system %(curl -X POST -H "Content-Type: application/json" -d@- "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/#{issue['number']}?access_token=$GITHUB_TOKEN" << 'JSON'\n#{body.to_json}\nJSON)
+              message = [
+                "I am closing this issue now because these two conditions are met:",
+                "",
+                "- This issue has a `TODO` label."
+                "- A `TODO` comment referencing this issue no longer appears in the repository's default branch."
+              ].join("\n")
+              post_body = { body: message }
+              system %(curl -X POST -H "Content-Type: application/json" -d@- "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/#{issue['number']}/comments?access_token=$GITHUB_TOKEN" << 'JSON'\n#{post_body.to_json}\nJSON)
             end
           EOF
