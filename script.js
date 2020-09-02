@@ -120,7 +120,7 @@
       <div class="px-2" :class="textClasses" style="max-width: 85%">
         <span
           class="bg-#353433"
-          style="box-shadow: 2px 2px 0 #353433, 2px -2px 0 #353433, -2px 2px 0 #353433, -2px -2px 0 #353433;"
+          style="box-shadow: 4px 1px 0 #353433, 4px -1px 0 #353433, -4px 1px 0 #353433, -4px -1px 0 #353433;"
         >
           {{ item.data.item.title }}
         </span>
