@@ -104,8 +104,13 @@
         class="flex-none rounded border w-4 h-4 bg-#353433"
         :class="boxClasses"
       ></div>
-      <div class="px-2 bg-#353433" :class="textClasses" style="max-width: 85%">
-        {{ item.data.item.title }}
+      <div class="px-2" :class="textClasses" style="max-width: 85%">
+        <span
+          class="bg-#353433"
+          style="box-shadow: 2px 2px 0 #353433, 2px -2px 0 #353433, -2px 2px 0 #353433, -2px -2px 0 #353433;"
+        >
+          {{ item.data.item.title }}
+        </span>
       </div>
     </div>`,
   })
