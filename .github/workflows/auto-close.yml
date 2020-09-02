@@ -35,6 +35,6 @@ jobs:
               ].join("\n")
               post_body = { body: message }
               system %(curl -X POST -H "Content-Type: application/json" -d@- "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/#{issue['number']}/comments?access_token=$GITHUB_TOKEN" << 'JSON'\n#{post_body.to_json}\nJSON)
-              system %(curl -X PATCH -d state=closed "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/#{issue['number']}?access_token=$GITHUB_TOKEN")
+              system %(echo '{"state":"closed"}' | curl -X PATCH -H "Content-Type: application/json" -d@- "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/#{issue['number']}?access_token=$GITHUB_TOKEN")
             end
           EOF
